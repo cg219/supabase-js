@@ -2,6 +2,8 @@
 
 An isomorphic Javascript client for Supabase.
 
+This is a full deno port of [supabase-js](https://github.com/supabase/supabase-js)
+
 - Documentation: https://supabase.io/docs/client/supabase-client
 
 ## Usage
@@ -11,7 +13,7 @@ npm install @supabase/supabase-js
 ```
 
 ```js
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from 'https://deno.land/x/supabase/mod.ts'
 
 // Create a single supabase client for interacting with your database
 const supabase = createClient('https://xyzcompany.supabase.co', 'public-anon-key')
