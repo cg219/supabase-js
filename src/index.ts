@@ -1,14 +1,14 @@
-import SupabaseClient from './SupabaseClient'
-import { SupabaseClientOptions, SupabaseRealtimePayload } from './lib/types'
-import { User as AuthUser, Session as AuthSession } from '@supabase/gotrue-js'
-export * from '@supabase/gotrue-js'
-export {
+import SupabaseClient from './SupabaseClient.ts'
+import { SupabaseClientOptions, SupabaseRealtimePayload } from './lib/types.ts'
+import { User as AuthUser, Session as AuthSession } from 'https://deno.land/x/gotrue/mod.ts'
+export * from 'https://deno.land/x/gotrue/mod.ts'
+export type {
   PostgrestResponse,
   PostgrestSingleResponse,
   PostgrestMaybeSingleResponse,
   PostgrestError,
-} from '@supabase/postgrest-js'
-export * from '@supabase/realtime-js'
+} from 'https://deno.land/x/postgrest/mod.ts'
+export * from 'https://deno.land/x/realtime/mod.ts'
 
 /**
  * Creates a new Supabase Client.
@@ -21,7 +21,7 @@ const createClient = (
   return new SupabaseClient(supabaseUrl, supabaseKey, options)
 }
 
-export {
+export type {
   createClient,
   SupabaseClient,
   SupabaseClientOptions,

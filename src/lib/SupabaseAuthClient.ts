@@ -1,4 +1,4 @@
-import { GoTrueClient } from '@supabase/gotrue-js'
+import { GoTrueClient } from 'https://deno.land/x/gotrue/mod.ts'
 
 export class SupabaseAuthClient extends GoTrueClient {
   constructor(options: {

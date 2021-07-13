@@ -1,5 +1,5 @@
-import { RealtimeSubscription, RealtimeClient, Transformers } from '@supabase/realtime-js'
-import { SupabaseEventTypes, SupabaseRealtimePayload } from './types'
+import { RealtimeSubscription, RealtimeClient, Transformers } from 'https://deno.land/x/realtime/mod.ts'
+import { SupabaseEventTypes, SupabaseRealtimePayload } from './types.ts'
 
 export class SupabaseRealtimeClient {
   subscription: RealtimeSubscription

@@ -1,10 +1,10 @@
-import { DEFAULT_HEADERS } from './lib/constants'
-import { SupabaseClientOptions } from './lib/types'
-import { SupabaseAuthClient } from './lib/SupabaseAuthClient'
-import { SupabaseQueryBuilder } from './lib/SupabaseQueryBuilder'
-import { SupabaseStorageClient } from '@supabase/storage-js'
-import { PostgrestClient } from '@supabase/postgrest-js'
-import { RealtimeClient, RealtimeSubscription } from '@supabase/realtime-js'
+import { DEFAULT_HEADERS } from './lib/constants.ts'
+import { SupabaseClientOptions } from './lib/types.ts'
+import { SupabaseAuthClient } from './lib/SupabaseAuthClient.ts'
+import { SupabaseQueryBuilder } from './lib/SupabaseQueryBuilder.ts'
+import { SupabaseStorageClient } from 'https://deno.land/x/storagee/mod.ts'
+import { PostgrestClient } from 'https://deno.land/x/postgrest/mod.ts'
+import { RealtimeClient, RealtimeSubscription } from 'https://deno.land/x/realtime/mod.ts'
 
 const DEFAULT_OPTIONS = {
   schema: 'public',

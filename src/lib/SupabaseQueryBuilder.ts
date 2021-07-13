@@ -1,7 +1,7 @@
-import { PostgrestQueryBuilder } from '@supabase/postgrest-js'
-import { SupabaseRealtimeClient } from './SupabaseRealtimeClient'
-import { RealtimeClient } from '@supabase/realtime-js'
-import { SupabaseEventTypes, SupabaseRealtimePayload } from './types'
+import { PostgrestQueryBuilder } from 'https://deno.land/x/postgrest/mod.ts'
+import { SupabaseRealtimeClient } from './SupabaseRealtimeClient.ts'
+import { RealtimeClient } from 'https://deno.land/x/realtime/mod.ts'
+import { SupabaseEventTypes, SupabaseRealtimePayload } from './types.ts'
 
 export class SupabaseQueryBuilder<T> extends PostgrestQueryBuilder<T> {
   private _subscription: SupabaseRealtimeClient
