@@ -20,7 +20,7 @@ const DEFAULT_OPTIONS = {
  *
  * An isomorphic Javascript client for interacting with Postgres.
  */
-export default class SupabaseClient {
+export class SupabaseClient {
   /**
    * Supabase Auth allows you to create and manage user sessions for access to data that is secured by access policies.
    */
