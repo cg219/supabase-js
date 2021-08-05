@@ -1,10 +1,15 @@
+// deno-lint-ignore-file no-explicit-any
 import { DEFAULT_HEADERS } from './lib/constants.ts'
 import { SupabaseClientOptions } from './lib/types.ts'
 import { SupabaseAuthClient } from './lib/SupabaseAuthClient.ts'
 import { SupabaseQueryBuilder } from './lib/SupabaseQueryBuilder.ts'
 import { SupabaseStorageClient } from 'https://deno.land/x/storagee/mod.ts'
 import { PostgrestClient } from 'https://deno.land/x/postgrest/mod.ts'
-import { RealtimeClient, RealtimeSubscription } from 'https://deno.land/x/realtime/mod.ts'
+import {
+  RealtimeClient,
+  RealtimeSubscription,
+  RealtimeClientOptions,
+} from 'https://deno.land/x/realtime/mod.ts'
 
 const DEFAULT_OPTIONS = {
   schema: 'public',
@@ -42,6 +47,7 @@ export class SupabaseClient {
    * @param options.persistSession Set to "true" if you want to automatically save the user session into local storage.
    * @param options.detectSessionInUrl Set to "true" if you want to automatically detects OAuth grants in the URL and signs in the user.
    * @param options.headers Any additional headers to send with each network request.
+   * @param options.realtime Options passed along to realtime-js constructor.
    */
   constructor(
     protected supabaseUrl: string,
@@ -59,7 +65,7 @@ export class SupabaseClient {
     this.schema = settings.schema
 
     this.auth = this._initSupabaseAuthClient(settings)
-    this.realtime = this._initRealtimeClient()
+    this.realtime = this._initRealtimeClient(settings.realtime)
 
     // In the future we might allow the user to pass in a logger to receive these events.
     // this.realtime.onOpen(() => console.log('OPEN'))
@@ -95,6 +101,7 @@ export class SupabaseClient {
    * @param fn  The function name to call.
    * @param params  The parameters to pass to the function call.
    */
+  // deno-lint-ignore ban-types
   rpc<T = any>(fn: string, params?: object) {
     const rest = this._initPostgRESTClient()
     return rest.rpc<T>(fn, params)
@@ -106,14 +113,15 @@ export class SupabaseClient {
    * @param subscription The subscription you want to remove.
    */
   removeSubscription(subscription: RealtimeSubscription) {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       try {
-        await this._closeSubscription(subscription)
+        this._closeSubscription(subscription).then(() => {})
 
         const openSubscriptions = this.getSubscriptions().length
         if (!openSubscriptions) {
-          const { error } = await this.realtime.disconnect()
-          if (error) return resolve({ error })
+          this.realtime.disconnect().then(({ error }) => {
+            if (error) return resolve({ error })
+          })
         }
         return resolve({ error: null, data: { openSubscriptions } })
       } catch (error) {
@@ -154,9 +162,10 @@ export class SupabaseClient {
     })
   }
 
-  private _initRealtimeClient() {
+  private _initRealtimeClient(options?: RealtimeClientOptions) {
     return new RealtimeClient(this.realtimeUrl, {
-      params: { apikey: this.supabaseKey },
+      ...options,
+      params: { ...options?.params, apikey: this.supabaseKey },
     })
   }
 

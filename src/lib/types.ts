@@ -1,3 +1,6 @@
+// deno-lint-ignore-file camelcase
+import { RealtimeClientOptions } from 'https://deno.land/x/realtime/mod.ts'
+
 export type SupabaseClientOptions = {
   /**
    * The Postgres schema which your tables belong to. Must be on the list of exposed schemas in Supabase. Defaults to 'public'.
@@ -23,6 +26,10 @@ export type SupabaseClientOptions = {
    * A storage provider. Used to store the logged in session.
    */
   localStorage?: Storage
+  /**
+   * Options passed to the realtime-js instance
+   */
+   realtime?: RealtimeClientOptions
 }
 
 export type SupabaseRealtimePayload<T> = {
