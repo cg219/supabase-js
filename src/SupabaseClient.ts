@@ -16,7 +16,6 @@ const DEFAULT_OPTIONS = {
   autoRefreshToken: true,
   persistSession: true,
   detectSessionInUrl: true,
-  localStorage: globalThis.localStorage,
   headers: DEFAULT_HEADERS,
 }
 
@@ -57,6 +56,9 @@ export class SupabaseClient {
     if (!supabaseUrl) throw new Error('supabaseUrl is required.')
     if (!supabaseKey) throw new Error('supabaseKey is required.')
 
+    // remove trailing slash
+    supabaseUrl = supabaseUrl.replace(/\/$/, '')
+
     const settings = { ...DEFAULT_OPTIONS, ...options }
     this.restUrl = `${supabaseUrl}/rest/v1`
     this.realtimeUrl = `${supabaseUrl}/realtime/v1`.replace('http', 'ws')
@@ -96,15 +98,21 @@ export class SupabaseClient {
   }
 
   /**
-   * Perform a stored procedure call.
+   * Perform a function call.
    *
    * @param fn  The function name to call.
    * @param params  The parameters to pass to the function call.
    */
-  // deno-lint-ignore ban-types
-  rpc<T = any>(fn: string, params?: object) {
+  rpc<T = any>(
+    fn: string,
+    params?: Record<string, unknown>,
+    {
+      head = false,
+      count = null,
+    }: { head?: boolean; count?: null | 'exact' | 'planned' | 'estimated' } = {}
+  ) {
     const rest = this._initPostgRESTClient()
-    return rest.rpc<T>(fn, params)
+    return rest.rpc<T>(fn, params, { head, count })
   }
 
   /**
@@ -148,17 +156,20 @@ export class SupabaseClient {
     persistSession,
     detectSessionInUrl,
     localStorage,
+    headers
   }: SupabaseClientOptions) {
+    const authHeaders = {
+      Authorization: `Bearer ${this.supabaseKey}`,
+      apikey: `${this.supabaseKey}`,
+    }
+
     return new SupabaseAuthClient({
       url: this.authUrl,
-      headers: {
-        Authorization: `Bearer ${this.supabaseKey}`,
-        apikey: `${this.supabaseKey}`,
-      },
       autoRefreshToken,
       persistSession,
       detectSessionInUrl,
       localStorage,
+      headers: { ...headers, ...authHeaders },
     })
   }
 
@@ -177,7 +188,7 @@ export class SupabaseClient {
   }
 
   private _getAuthHeaders(): { [key: string]: string } {
-    const headers: { [key: string]: string } = {}
+    const headers: { [key: string]: string } = DEFAULT_HEADERS
     const authBearer = this.auth.session()?.access_token ?? this.supabaseKey
     headers['apikey'] = this.supabaseKey
     headers['Authorization'] = `Bearer ${authBearer}`

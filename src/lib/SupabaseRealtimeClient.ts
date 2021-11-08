@@ -1,12 +1,25 @@
+// deno-lint-ignore-file no-explicit-any camelcase
 import { RealtimeSubscription, RealtimeClient, Transformers } from 'https://deno.land/x/realtime/mod.ts'
 import { SupabaseEventTypes, SupabaseRealtimePayload } from './types.ts'
 
 export class SupabaseRealtimeClient {
   subscription: RealtimeSubscription
 
-  constructor(socket: RealtimeClient, schema: string, tableName: string) {
+  constructor(
+    socket: RealtimeClient,
+    headers: { [key: string]: string },
+    schema: string,
+    tableName: string
+  ) {
+    const chanParams: { [key: string]: string } = {}
     const topic = tableName === '*' ? `realtime:${schema}` : `realtime:${schema}:${tableName}`
-    this.subscription = socket.channel(topic)
+    const userToken = headers['Authorization'].split(' ')[1]
+
+    if (userToken) {
+      chanParams['user_token'] = userToken
+    }
+
+    this.subscription = socket.channel(topic, chanParams)
   }
 
   private getPayloadRecords(payload: any) {
@@ -53,6 +66,7 @@ export class SupabaseRealtimeClient {
   /**
    * Enables the subscription.
    */
+  // deno-lint-ignore ban-types
   subscribe(callback: Function = () => {}) {
     this.subscription.onError((e: Error) => callback('SUBSCRIPTION_ERROR', e))
     this.subscription.onClose(() => callback('CLOSED'))

@@ -37,6 +37,10 @@ Then you can use it from a global `supabase` variable:
 </script>
 ```
 
+### Custom `fetch` implementation
+
+This deno port doesnt support custom fetch implementations because deno has a native fetch api built in.
+
 ## Sponsors
 
 We are building the features of Firebase using enterprise-grade, open source products. We support existing communities wherever possible, and if the products don’t exist we build them and open source them ourselves. Thanks to these sponsors who are making the OSS ecosystem better for everyone.

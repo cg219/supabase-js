@@ -1,5 +1,8 @@
 // deno-lint-ignore-file camelcase
+import { GoTrueClient } from 'https://deno.land/x/gotrue/mod.ts'
 import { RealtimeClientOptions } from 'https://deno.land/x/realtime/mod.ts'
+
+type SupabaseAuthClientOptions = ConstructorParameters<typeof GoTrueClient>[0]
 
 export type SupabaseClientOptions = {
   /**
@@ -25,7 +28,7 @@ export type SupabaseClientOptions = {
   /**
    * A storage provider. Used to store the logged in session.
    */
-  localStorage?: Storage
+  localStorage?: SupabaseAuthClientOptions['localStorage']
   /**
    * Options passed to the realtime-js instance
    */
