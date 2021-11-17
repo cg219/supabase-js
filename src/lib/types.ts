@@ -2,7 +2,7 @@
 import { GoTrueClient } from 'https://deno.land/x/gotrue/mod.ts'
 import { RealtimeClientOptions } from 'https://deno.land/x/realtime/mod.ts'
 
-type SupabaseAuthClientOptions = ConstructorParameters<typeof GoTrueClient>[0]
+export type SupabaseAuthClientOptions = ConstructorParameters<typeof GoTrueClient>[0]
 
 export type SupabaseClientOptions = {
   /**
