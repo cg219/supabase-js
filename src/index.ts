@@ -12,6 +12,6 @@ const createClient = (
 }
 
 export { createClient, SupabaseClient }
-export * from 'https://deno.land/x/gotrue/mod.ts'
+export * from 'https://cg219.github.io/gotrue-js/mod.ts'
 export * from 'https://deno.land/x/postgrest/mod.ts'
 export * from 'https://deno.land/x/realtime/mod.ts'

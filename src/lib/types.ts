@@ -1,5 +1,5 @@
 // deno-lint-ignore-file camelcase
-import { GoTrueClient } from 'https://deno.land/x/gotrue/mod.ts'
+import { GoTrueClient } from 'https://cg219.github.io/gotrue-js/mod.ts'
 import { RealtimeClientOptions } from 'https://deno.land/x/realtime/mod.ts'
 
 export type SupabaseAuthClientOptions = ConstructorParameters<typeof GoTrueClient>[0]
